@@ -17,7 +17,7 @@ export default async function subscribe(req: NextApiRequest, res: NextApiRespons
             payment_method_types: ['card'],
             billing_address_collection: 'required',
             line_items: [
-                { price: 'price_1LmgIQKNQa3lTNNw3emLL7Tw'}
+                { price: 'price_1LmgIQKNQa3lTNNw3emLL7Tw', quantity: 1}
             ],
             mode: 'subscription',
             allow_promotion_codes: true,
