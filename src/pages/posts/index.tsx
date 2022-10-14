@@ -4,6 +4,7 @@ import { getPrismicClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 import Prismc from '@prismicio/client';
 import { RichText } from 'prismic-dom';
+import Link from 'next/link';
 
 type Post = {
     slug: string;
@@ -26,11 +27,13 @@ export default function Posts({ posts }: PostsProps) {
         <main className={styles.container}>
             <div className={styles.posts}>
                {posts.map(post => (
-                 <a key={post.slug}>
-                    <time>{post.updatedAt}</time>
-                    <strong>{post.title}</strong>
-                    <p>{post.excerpt}</p>
-                </a>
+                <Link key={post.slug} href={`/posts/${post.slug}`}>
+                    <a>
+                        <time>{post.updatedAt}</time>
+                        <strong>{post.title}</strong>
+                        <p>{post.excerpt}</p>
+                    </a>
+                </Link>
                ))}
             </div>
         </main>
@@ -50,11 +53,10 @@ export const getStaticProps: GetStaticProps = async () => {
             pageSize: 100,
         }
     )
-    
 
     const posts = response.results.map(post => ({
-        slug: post.id,
-        title: post.uid[0].toUpperCase() + post.uid.substr(1),
+        slug: post.uid,
+        title: RichText.asText(post.data.title),
         excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
         updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR', {
             day: '2-digit',
